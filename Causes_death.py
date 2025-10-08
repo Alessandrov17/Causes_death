@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
-
-This is a temporary script file.
+Theo Guindi
+Alessandro Vellucci
+The dataset chosen shows the top 10 leading causes of death in the United States
+which are adjusted by age.
 """
 
-print("this is a test")
-
-print("again")
-
+import numpy as np 
+Year,Cause_Name,Cause_Name,State,Deaths,Age_adjusted_Death_Rate = np.loadtxt("NCHS_-_Leading_Causes_of_Death__United_States (3).csv",skiprows=1,unpack=True,delimiter=',',usecols=range(0,6))
+  
