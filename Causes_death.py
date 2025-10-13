@@ -12,7 +12,6 @@ import pandas as pd
 data = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States (3).csv")
 
 
-print(data.columns)
 
 years = data["Year"].to_numpy()
 
@@ -25,6 +24,14 @@ state = data["State"].to_numpy()
 deaths = data["Deaths"].to_numpy()
 
 death_rate = data ["Age-adjusted Death Rate"].to_numpy()
+
+
+#filtering all the cases for the state of arkansas
+        
+for i in range(len(state)):
+    if state[i] == "Arkansas":
+        print("Year:", years[i], "Cause:", cause_name[i], "Deaths:", deaths[i])
+
 
 
 
