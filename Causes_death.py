@@ -88,13 +88,26 @@ top5_causes_2017 = (
 # Compute corresponding death rates for same causes
 death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
 
-# Makes labels shorter
+
+# 7) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
+import textwrap
+
+# Filter for 2017
+data_2017 = data[data["Year"] == 2017]
+
+# Get top 5 causes by total deaths
+top5_causes_2017 = (data_2017.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(5))
+
+# Compute corresponding death rates for same causes
+death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
+    
+# Wrap long labels for better readability
 labels_wrapped = [textwrap.fill(label, 15) for label in top5_causes_2017.index]
 
-# Making subplots
+# Create subplots
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-# ==>Left subplot: Death counts
+#Left subplot: Death counts
 x = range(len(top5_causes_2017))
 axes[0].bar(x, top5_causes_2017.values, color='skyblue')
 axes[0].set_title("Deaths by Top 5 Causes in 2017")
@@ -103,7 +116,7 @@ axes[0].set_ylabel("Number of Deaths")
 axes[0].set_xticks(x)
 axes[0].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
 
-# ==>Right subplot: Age-adjusted Death Rates
+#Right subplot: Age-adjusted Death Rates
 x2 = range(len(death_rates_2017))
 axes[1].bar(x2, death_rates_2017.values, color='salmon')
 axes[1].set_title("Age-adjusted Death Rates for Top 5 Causes in 2017")
@@ -112,8 +125,9 @@ axes[1].set_ylabel("Age-adjusted Death Rate (per 100,000)")
 axes[1].set_xticks(x2)
 axes[1].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
 
-# Make plots adjusted for better fit
+# Adjust layout to fit labels properly
 plt.subplots_adjust(bottom=0.25, wspace=0.4)
+plt.show()
 
 
 
@@ -224,10 +238,3 @@ plt.pie(state_deaths, labels=state_deaths.index,autopct='%1.1f%%', startangle=90
 plt.title("Heart disease death by states")
 plt.show()
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> 8680e6bc2d18a56ac71e2c167162a3777cad244e
