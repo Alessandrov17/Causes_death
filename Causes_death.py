@@ -151,11 +151,11 @@ death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate
 
 heart=data[data["Cause Name"]=="Heart disease"] 
 
-plt.figure(figsize=(8.6)) 
-plt.scatter(heart["Deaths"], heart["Age-adjusted-Deat-Rate"],color="red",alpha=0.7)
+plt.figure(figsize=(8,6)) 
+plt.scatter(heart["Deaths"], heart["Age-adjusted Death Rate"],color="red",alpha=0.7)
 plt.title("Heart disease: Death vs age adjusted death rate") 
 plt.xlabel("Deaths")
-plt.ylabel("Age-adjusted death rate")
+plt.ylabel("Age-adjusted Death Rate")
 plt.show()
 
 
