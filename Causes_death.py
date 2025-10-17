@@ -44,8 +44,25 @@ plt.title("Distribution of Age-adjusted Death Rates (1999 - 2017)")
 plt.xlabel("Age-adjusted Death Rate (per 100,000 population)")
 plt.ylabel("Frequency")
 plt.show()
-        
 
+
+
+
+# Filter data for 2017
+# 7) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
+
+
+# Data in 2017 only
+data_2017 = us_data[us_data["Year"] == 2017]
+
+# Top five deaths only in year 2017
+top5_causes_2017 = (
+    data_2017.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(5))
+
+# Compute corresponding death rates for same causes
+death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
+
+git fetch --verbose
 
 
 
