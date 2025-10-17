@@ -163,6 +163,10 @@ plt.show()
 
 heart= data[data["Cause Name"]=="Heart disease"]
 
+#Removing all cases labelled united states
+heart = heart[heart["State"]!="United States"]
+
+
 state_deaths=heart.groupby("State")["Deaths"].sum()
 
 plt.figure(figsize=(8,8))
