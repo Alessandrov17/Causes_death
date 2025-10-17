@@ -4,6 +4,22 @@ Theo Guindi
 Alessandro Vellucci
 The dataset chosen shows the top 10 leading causes of death in the United States
 which are adjusted by age.
+LIA Deliverable 2
+a) All plots should contain a title and a description for both axis x and y. - Done
+b) You should comment your code with a quick explanation about each plot. - Done
+
+To enhance readability, each graph corresponds to a certain letter, 
+which corresponds to the following instructions:
+
+c) 1 plot of any type containing data from more than 1 array using different - 
+colors and line styles.
+d) 1 plot of any type using grid.
+e) 1 plot of any type containing 2 subplots side by side (counts as 1).
+f) 1 scatter plot.
+g) 1 bar plot.
+h) 1 histogram.
+i) 1 pie chart.
+
 """
 
 import pandas as pd
@@ -18,39 +34,46 @@ state = data["State"].to_numpy()
 deaths = data["Deaths"].to_numpy()
 death_rate = data["Age-adjusted Death Rate"].to_numpy()
 
-# 1) This is a bar graph showcasing the deaths per year from the year 1999-2017
+# c) Heatmap: Age-adjusted Death Rates by State and Top 10 Causes (2017)
 
-#How have age adjusted death rates for the top 10 causes of death 
-#changed from the year 2000 to most recent?
-
-# Take away the variety in the different states, unites values for the whole united states
-us_data = data[data["State"] == "United States"]
-
-total_deaths_per_year = us_data.groupby("Year")["Deaths"].sum()
-
-plt.bar(total_deaths_per_year.index, total_deaths_per_year.values, color='red', width=0.6)
-
-plt.title("Total Deaths per Year in the United States (1999 - 2017)")
-plt.xlabel("Year")
-plt.ylabel("Total Number of Deaths")
-plt.show()
-
-
-
-# 2) Histogram with age-adjusted death rates for 1999-2017
-plt.figure(figsize=(8,5))
-plt.hist(us_data["Age-adjusted Death Rate"], bins=30, color='purple')
-plt.title("Distribution of Age-adjusted Death Rates (1999 - 2017)")
-plt.xlabel("Age-adjusted Death Rate (per 100,000 population)")
-plt.ylabel("Frequency")
-plt.show()
-
-
-
-# 6) Line Plot: Trends in Age-Adjusted Death Rates for Top 10 Causes (2000–2017)
+import numpy as np
 
 # Filter U.S.-only data
 us_data = data[data["State"] == "United States"]
+
+# Filter U.S. states only (exclude national totals)
+states_data = data[(data["State"] != "United States") & (data["Year"] == 2017)]
+
+# Identify top 10 causes nationally
+top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
+    
+# Filter for top 10 causes
+heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
+
+# Filter only those causes for 2017
+heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
+
+# Create pivot table: rows = states, columns = causes, values = death rate
+heatmap_pivot = heatmap_data.pivot_table(index="State",columns="113 Cause Name",values="Age-adjusted Death Rate",aggfunc="mean")
+# Convert to numeric array for plotting
+values = heatmap_pivot.values
+states = heatmap_pivot.index
+causes = heatmap_pivot.columns
+
+# Plot using Matplotlib
+plt.figure(figsize=(12, 8))
+plt.imshow(values, aspect='auto', cmap='coolwarm')
+plt.colorbar(label="Age-adjusted Death Rate (per 100,000)")
+plt.xticks(np.arange(len(causes)), causes, rotation=45, ha='right', fontsize=8)
+plt.yticks(np.arange(len(states)), states, fontsize=8)
+plt.title("Age-adjusted Death Rates by State for Top 10 Causes (2017)")
+plt.xlabel("Cause of Death")
+plt.ylabel("State")
+plt.tight_layout()
+plt.show()
+
+
+# d) Line Plot: Trends in Age-Adjusted Death Rates for Top 10 Causes (2000–2017)
 
 # Get top 10 causes overall
 top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
@@ -73,23 +96,7 @@ plt.tight_layout()
 plt.show()
 
 
-
-# Filter data for 2017
-# 7) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
-
-
-# Data in 2017 only
-data_2017 = us_data[us_data["Year"] == 2017]
-
-# Top five deaths only in year 2017
-top5_causes_2017 = (
-    data_2017.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(5))
-
-# Compute corresponding death rates for same causes
-death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
-
-
-# 7) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
+# e) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
 import textwrap
 
 # Filter for 2017
@@ -130,88 +137,7 @@ plt.subplots_adjust(bottom=0.25, wspace=0.4)
 plt.show()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#scatter plot filtered for one cause 
+# f) scatter plot filtered for one cause 
 
 heart=data[data["Cause Name"]=="Heart disease"] 
 
@@ -223,7 +149,36 @@ plt.ylabel("Age-adjusted Death Rate")
 plt.show()
 
 
-#Pie chart Deaths by state for a spevific cause
+
+# g) This is a bar graph showcasing the deaths per year from the year 1999-2017
+
+#How have age adjusted death rates for the top 10 causes of death 
+#changed from the year 2000 to most recent?
+
+# Take away the variety in the different states, unites values for the whole united states
+us_data = data[data["State"] == "United States"]
+
+total_deaths_per_year = us_data.groupby("Year")["Deaths"].sum()
+
+plt.bar(total_deaths_per_year.index, total_deaths_per_year.values, color='red', width=0.6)
+
+plt.title("Total Deaths per Year in the United States (1999 - 2017)")
+plt.xlabel("Year")
+plt.ylabel("Total Number of Deaths")
+plt.show()
+
+
+
+# h) Histogram with age-adjusted death rates for 1999-2017
+plt.figure(figsize=(8,5))
+plt.hist(us_data["Age-adjusted Death Rate"], bins=30, color='purple')
+plt.title("Distribution of Age-adjusted Death Rates (1999 - 2017)")
+plt.xlabel("Age-adjusted Death Rate (per 100,000 population)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+# i) Pie chart Deaths by state for a specific cause
 
 heart= data[data["Cause Name"]=="Heart disease"]
 
