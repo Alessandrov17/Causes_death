@@ -8,6 +8,7 @@ which are adjusted by age.
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import textwrap
 
 data = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States (3).csv")
 
@@ -62,7 +63,33 @@ top5_causes_2017 = (
 # Compute corresponding death rates for same causes
 death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
 
-git fetch --verbose
+# Makes labels shorter
+labels_wrapped = [textwrap.fill(label, 15) for label in top5_causes_2017.index]
+
+# Making subplots
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+# ==>Left subplot: Death counts
+x = range(len(top5_causes_2017))
+axes[0].bar(x, top5_causes_2017.values, color='skyblue')
+axes[0].set_title("Deaths by Top 5 Causes in 2017")
+axes[0].set_xlabel("Cause of Death")
+axes[0].set_ylabel("Number of Deaths")
+axes[0].set_xticks(x)
+axes[0].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
+
+# ==>Right subplot: Age-adjusted Death Rates
+x2 = range(len(death_rates_2017))
+axes[1].bar(x2, death_rates_2017.values, color='salmon')
+axes[1].set_title("Age-adjusted Death Rates for Top 5 Causes in 2017")
+axes[1].set_xlabel("Cause of Death")
+axes[1].set_ylabel("Age-adjusted Death Rate (per 100,000)")
+axes[1].set_xticks(x2)
+axes[1].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
+
+# Make plots adjusted for better fit
+plt.subplots_adjust(bottom=0.25, wspace=0.4)
+plt.show()
 
 
 
