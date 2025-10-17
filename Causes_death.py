@@ -36,6 +36,7 @@ plt.ylabel("Total Number of Deaths")
 plt.show()
 
 
+
 # 2) Histogram with age-adjusted death rates for 1999-2017
 plt.figure(figsize=(8,5))
 plt.hist(us_data["Age-adjusted Death Rate"], bins=30, color='purple')
@@ -43,4 +44,11 @@ plt.title("Distribution of Age-adjusted Death Rates (1999 - 2017)")
 plt.xlabel("Age-adjusted Death Rate (per 100,000 population)")
 plt.ylabel("Frequency")
 plt.show()
+        
+
+
+
+
+
+
 
