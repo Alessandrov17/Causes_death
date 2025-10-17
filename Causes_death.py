@@ -62,7 +62,102 @@ top5_causes_2017 = (
 # Compute corresponding death rates for same causes
 death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
 
-git fetch --verbose
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#scatter plot filteredd for one cause 
+
+heart=data[data["Cause Name"]=="Heart disease"] 
+
+plt.figure(figsize=(8.6))
+plt.scatter(heart["Deaths"], heart["Age-adjusted-Deat-Rate"],color="red",alpha=0.7)
+plt.title("Heart disease: Death vs age adjusted death rate") 
+plt.xlabel("Deaths")
+plt.ylabel("Age-adjusted death rate")
+plt.show()
+
 
 
 
