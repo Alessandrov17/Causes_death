@@ -8,7 +8,6 @@ which are adjusted by age.
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import textwrap
 
 data = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States (3).csv")
 
@@ -115,5 +114,120 @@ axes[1].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
 
 # Make plots adjusted for better fit
 plt.subplots_adjust(bottom=0.25, wspace=0.4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#scatter plot filtered for one cause 
+
+heart=data[data["Cause Name"]=="Heart disease"] 
+
+plt.figure(figsize=(8,6)) 
+plt.scatter(heart["Deaths"], heart["Age-adjusted Death Rate"],color="red",alpha=0.7)
+plt.title("Heart disease: Death vs age adjusted death rate") 
+plt.xlabel("Deaths")
+plt.ylabel("Age-adjusted Death Rate")
 plt.show()
 
+
+#Pie chart Deaths by state for a spevific cause
+
+heart= data[data["Cause Name"]=="Heart disease"]
+
+#Removing all cases labelled united states
+heart = heart[heart["State"]!="United States"]
+
+
+state_deaths=heart.groupby("State")["Deaths"].sum()
+
+plt.figure(figsize=(8,8))
+plt.pie(state_deaths, labels=state_deaths.index,autopct='%1.1f%%', startangle=90)
+plt.title("Heart disease death by states")
+plt.show()
+
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 8680e6bc2d18a56ac71e2c167162a3777cad244e
