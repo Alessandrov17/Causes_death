@@ -48,6 +48,32 @@ plt.show()
 
 
 
+# 6) Line Plot: Trends in Age-Adjusted Death Rates for Top 10 Causes (2000–2017)
+
+# Filter U.S.-only data
+us_data = data[data["State"] == "United States"]
+
+# Get top 10 causes overall
+top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
+    
+# Filter only those causes
+top10_data = us_data[us_data["113 Cause Name"].isin(top10_causes)]
+
+# Plot each cause as a line
+plt.figure(figsize=(12, 6))
+for cause in top10_causes:
+    subset = top10_data[top10_data["113 Cause Name"] == cause]
+    plt.plot(subset["Year"], subset["Age-adjusted Death Rate"], marker='o', label=cause)
+
+plt.title("Age-adjusted Death Rate Trends for Top 10 Causes (2000–2017)")
+plt.xlabel("Year")
+plt.ylabel("Age-adjusted Death Rate (per 100,000 population)")
+plt.legend(fontsize=7, loc="upper right")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
 
 # Filter data for 2017
 # 7) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
@@ -90,9 +116,4 @@ axes[1].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
 # Make plots adjusted for better fit
 plt.subplots_adjust(bottom=0.25, wspace=0.4)
 plt.show()
-
-
-
-
-
 
