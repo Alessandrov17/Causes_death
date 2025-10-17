@@ -147,7 +147,7 @@ death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate
 
 
 
-#scatter plot filteredd for one cause 
+#scatter plot filtered for one cause 
 
 heart=data[data["Cause Name"]=="Heart disease"] 
 
@@ -159,6 +159,16 @@ plt.ylabel("Age-adjusted Death Rate")
 plt.show()
 
 
+#Pie chart Deaths by state for a spevific cause
+
+heart= data[data["Cause Name"]=="Heart disease"]
+
+state_deaths=heart.groupby("State")["Deaths"].sum()
+
+plt.figure(figsize=(8,8))
+plt.pie(state_deaths, labels=state_deaths.index,autopct='%1.1f%%', startangle=90)
+plt.title("Heart disease death by states")
+plt.show()
 
 
 
