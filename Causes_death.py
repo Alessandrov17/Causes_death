@@ -54,14 +54,13 @@ filtered_death_rate = []
 
 # Loop through all rows and apply condition
 for i in range(len(state)):
-    if state[i] == "Colorado":  # keep only Colorado data
+    if state[i] == "Colorado":  # Colorado data
         filtered_years.append(years[i])
         filtered_cause_name.append(cause_name[i])
         filtered_cause.append(cause[i])
         filtered_state.append(state[i])
         filtered_deaths.append(deaths[i])
         filtered_death_rate.append(death_rate[i])
-    # else: skip rows that are not from Colorado
 
 # Replace the old arrays with the filtered ones
 years = filtered_years
@@ -220,7 +219,6 @@ heart= data[data["Cause Name"]=="Heart disease"]
 
 #Removing all cases labelled united states
 heart = heart[heart["State"]!="United States"]
-
 
 state_deaths=heart.groupby("State")["Deaths"].sum()
 
