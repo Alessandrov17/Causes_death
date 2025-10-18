@@ -5,6 +5,9 @@ Alessandro Vellucci
 The dataset chosen shows the top 10 leading causes of death in the United States
 which are adjusted by age.
 LIA Deliverable 2
+
+
+
 a) All plots should contain a title and a description for both axis x and y. - Done
 b) You should comment your code with a quick explanation about each plot. - Done
 
@@ -25,8 +28,12 @@ i) 1 pie chart.
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+# Part 2: loading data (using pandas)
+
 data = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States (3).csv")
 
+# Making all columns into numpy arrays
 years = data["Year"].to_numpy()
 cause_name = data["113 Cause Name"].to_numpy()
 cause = data["Cause Name"].to_numpy()
@@ -34,33 +41,69 @@ state = data["State"].to_numpy()
 deaths = data["Deaths"].to_numpy()
 death_rate = data["Age-adjusted Death Rate"].to_numpy()
 
+
+# Part 3: Apllying filter using Loops and Conditionals
+
+# Sets these variables as arrays, to prepare them for the for loop
+filtered_years = []
+filtered_cause_name = []
+filtered_cause = []
+filtered_state = []
+filtered_deaths = []
+filtered_death_rate = []
+
+# Loop through all rows and apply condition
+for i in range(len(state)):
+    if state[i] == "Colorado":  # keep only Colorado data
+        filtered_years.append(years[i])
+        filtered_cause_name.append(cause_name[i])
+        filtered_cause.append(cause[i])
+        filtered_state.append(state[i])
+        filtered_deaths.append(deaths[i])
+        filtered_death_rate.append(death_rate[i])
+    # else: skip rows that are not from Colorado
+
+# Replace the old arrays with the filtered ones
+years = filtered_years
+cause_name = filtered_cause_name
+cause = filtered_cause
+state = filtered_state
+deaths = filtered_deaths
+death_rate = filtered_death_rate
+
+print("Filtered dataset only includes entries for the state of Colorado.")
+print("Remaining records:", len(years))
+
+# Part 4
 # c) Heatmap: Age-adjusted Death Rates by State and Top 10 Causes (2017)
 
 import numpy as np
 
-# Filter U.S.-only data
+# Filter US only data
 us_data = data[data["State"] == "United States"]
 
-# Filter U.S. states only (exclude national totals)
+# Filter US states. Filters for data in 2017
 states_data = data[(data["State"] != "United States") & (data["Year"] == 2017)]
 
-# Identify top 10 causes nationally
+# Identify top 10 causes nationally. Groups each "113 Cause Name" category and adds
+# The sum of all the "death" values. Then it sorts the values in ascending order, 
+# choosing only the top 10.
 top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
     
-# Filter for top 10 causes
+# Filters top 10 causes of death
 heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
 
-# Filter only those causes for 2017
+# Specifices to filter only for 2017 data
 heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
 
-# Create pivot table: rows = states, columns = causes, values = death rate
+# Creates pivot table: rows = states, columns = causes, values = death rate
 heatmap_pivot = heatmap_data.pivot_table(index="State",columns="113 Cause Name",values="Age-adjusted Death Rate",aggfunc="mean")
-# Convert to numeric array for plotting
+# Convert to numbers for plotting
 values = heatmap_pivot.values
 states = heatmap_pivot.index
 causes = heatmap_pivot.columns
 
-# Plot using Matplotlib
+# Matplotlib Plotting
 plt.figure(figsize=(12, 8))
 plt.imshow(values, aspect='auto', cmap='coolwarm')
 plt.colorbar(label="Age-adjusted Death Rate (per 100,000)")
@@ -74,19 +117,16 @@ plt.show()
 
 
 # d) Line Plot: Trends in Age-Adjusted Death Rates for Top 10 Causes (2000–2017)
-
-# Get top 10 causes overall
-top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
     
 # Filter only those causes
 top10_data = us_data[us_data["113 Cause Name"].isin(top10_causes)]
 
-# Plot each cause as a line
+# Loop runs once for each "cause" and it will plot one at a time.
 plt.figure(figsize=(12, 6))
 for cause in top10_causes:
     subset = top10_data[top10_data["113 Cause Name"] == cause]
     plt.plot(subset["Year"], subset["Age-adjusted Death Rate"], marker='o', label=cause)
-
+#Matplotlib Plotting
 plt.title("Age-adjusted Death Rate Trends for Top 10 Causes (2000–2017)")
 plt.xlabel("Year")
 plt.ylabel("Age-adjusted Death Rate (per 100,000 population)")
@@ -99,19 +139,21 @@ plt.show()
 # e) Two Subplots: Top 5 Causes – Deaths vs. Death Rates in 2017
 import textwrap
 
-# Filter for 2017
+# Filter 2017 data
 data_2017 = data[data["Year"] == 2017]
 
-# Get top 5 causes by total deaths
+# Groups data from 2017, adds deaths for each 113 cause name category, and selects
+# only top 5.
 top5_causes_2017 = (data_2017.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(5))
 
-# Compute corresponding death rates for same causes
+# Groups data for 2017, takes mean of age adjusted death rate, 
+# .loc selects rows from the top5_causes_2017, index gives the names of top 5 causes.
 death_rates_2017 = (data_2017.groupby("113 Cause Name")["Age-adjusted Death Rate"].mean().loc[top5_causes_2017.index])
-    
+
 # Wrap long labels for better readability
 labels_wrapped = [textwrap.fill(label, 15) for label in top5_causes_2017.index]
 
-# Create subplots
+# subplots (basic format for subplot) Essentially creates a type of canvas for the graphs
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
 #Left subplot: Death counts
@@ -132,7 +174,7 @@ axes[1].set_ylabel("Age-adjusted Death Rate (per 100,000)")
 axes[1].set_xticks(x2)
 axes[1].set_xticklabels(labels_wrapped, rotation=30, ha='right', fontsize=9)
 
-# Adjust layout to fit labels properly
+# Helps with layout of two subplots
 plt.subplots_adjust(bottom=0.25, wspace=0.4)
 plt.show()
 
@@ -151,12 +193,6 @@ plt.show()
 
 
 # g) This is a bar graph showcasing the deaths per year from the year 1999-2017
-
-#How have age adjusted death rates for the top 10 causes of death 
-#changed from the year 2000 to most recent?
-
-# Take away the variety in the different states, unites values for the whole united states
-us_data = data[data["State"] == "United States"]
 
 total_deaths_per_year = us_data.groupby("Year")["Deaths"].sum()
 
