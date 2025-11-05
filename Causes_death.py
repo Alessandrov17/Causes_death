@@ -87,7 +87,8 @@ states_data = data[(data["State"] != "United States") & (data["Year"] == 2017)]
 # Identify top 10 causes nationally. Groups each "113 Cause Name" category and adds
 # The sum of all the "death" values. Then it sorts the values in ascending order, 
 # choosing only the top 10.
-top10_causes = (us_data.groupby("113 Cause Name")["Deaths"].sum().sort_values(ascending=False).head(10).index)
+top10_causes = (us_data.groupby("113 Cause Name")["Deaths"]
+                .sum().sort_values(ascending=False).head(10).index)
     
 # Filters top 10 causes of death
 heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
@@ -226,4 +227,42 @@ plt.figure(figsize=(8,8))
 plt.pie(state_deaths, labels=state_deaths.index,autopct='%1.1f%%', startangle=90)
 plt.title("Heart disease death by states")
 plt.show()
+
+# 2. Preliminary steps
+# a) Initial data inspection:
+print(data.head(10))
+print(data.shape)
+print(data.info())
+print(data.describe())
+
+# b) Handle duplicate entries:
+# dupdata becomes new dataset with removed row duplicates
+dupdata = data.duplicated(keep='first')
+# Test to see if there have been any rows removed,
+print(dupdata.info())
+
+# Drop data for all column "Year", output shows first data for each year
+dropdata = data.drop_duplicates(keep='first')
+print(data.info())
+# No change were made, because all rows are unique
+
+# c) Identify and manage missing values:
+print(data.isnull())
+# Boolean is false, all columns have values within them
+
+# d) Correct data types and formats:
+# All of these are boolean which verify if one of these columns contains empty columns
+# They all return False, thus, all columns are full, no empty values
+print("Col. Year:", pd.isnull('Year'))
+print("Col. 113 Cause Name:", pd.isnull('113 Cause Name'))
+print("Col. Cause Name:", pd.isnull('Cause Name'))
+print("Col. State:", pd.isnull('State'))
+print("Col. Deaths:", pd.isnull('Deaths'))
+print("Age-adjusted Death Rate:", pd.isnull('Age-adjusted Death Rate'))
+
+# d) Correct data types and formats: (unecessary))
+
+# 3. Univariate non-graphical EDA
+
+
 
