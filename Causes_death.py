@@ -27,7 +27,7 @@ i) 1 pie chart.
 
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 
 # Part 2: loading data (using pandas)
 
@@ -300,4 +300,36 @@ print(data['State'].mode()[0])
 # These give answers for the most frequent value in each categorical variables,
 # however, they are not actually the most frequent, since they all have the same
 # frequency. 
+
+#4.  distribution plots 
+#a) custom number of bins 
+sns.displot(data,x="Age-adjusted Death Rate",bins=25)
+#b) Conditioning on other variables
+sns.displot(data,x="Age-adjusted Death Rate",hue="Year",element="step",bins=25)
+
+#c)stacked histogram
+
+sns.displot(data,x="Age-adjusted Death Rate",hue="Year",multiple="stack",bins=25)
+
+#d) dodge bars
+
+sns.displot(data,x="Age-adjusted Death Rate",hue="Year",multiple="dodge",bins=25)
+
+#e)normalized histogram statistics
+
+sns.displot(data,x="Age-adjusted Death Rate",hue="Year",stat="density",common_norm="False",bins=25)
+
+#f) Kernal density estimation (KDE)
+
+sns.displot(data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year",fill="True" )
+
+#g) Empirical cumulative distributions
+
+sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
+
+
+            
+
+
+
 
