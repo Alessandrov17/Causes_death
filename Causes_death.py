@@ -282,14 +282,16 @@ print(data.skew(numeric_only = True))
 
 # Categorical variables EDA
 
-print(data['113 Cause Name'].value_counts())
+# frequency counts
+
+print(data.value_counts("113 Cause Name", dropna = True))
 
 print(data['Cause Name'].value_counts())
 
 print(data['State'].value_counts())
 print(data.columns)
 
-
+# proportion, mode
 
 
 
