@@ -264,5 +264,33 @@ print("Age-adjusted Death Rate:", pd.isnull('Age-adjusted Death Rate'))
 
 # 3. Univariate non-graphical EDA
 
+# Numerical variable EDA
+# Mean, median, standard deviation, and quartiles.
+print(data.describe())
+# Kurtosis of each numerical column:
+print("Kurtosis of each numerical column:")
+print(data.kurt(axis = 0, numeric_only=True))
+# Mode of each numerical column:
+print("The mode of each numerical column is:")
+print(data.mode(numeric_only = True))
+# Variance of each numerical column:
+print("The variance of each numerical column is:")
+print(data.var(numeric_only = True))
+# Skewness of each numerical column:
+print("The skew of each numerical column is:")
+print(data.skew(numeric_only = True))
+
+# Categorical variables EDA
+
+print(data['113 Cause Name'].value_counts())
+
+print(data['Cause Name'].value_counts())
+
+print(data['State'].value_counts())
+print(data.columns)
+
+
+
+
 
 
