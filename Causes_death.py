@@ -284,15 +284,20 @@ print(data.skew(numeric_only = True))
 
 # frequency counts
 
-print(data.value_counts("113 Cause Name", dropna = True))
-
+print(data.value_counts("113 Cause Name"))
 print(data['Cause Name'].value_counts())
-
 print(data['State'].value_counts())
-print(data.columns)
 
-# proportion, mode
+# proportion
+print(data.value_counts("113 Cause Name", normalize = True))
+print(data['Cause Name'].value_counts(normalize = True))
+print(data['State'].value_counts(normalize = True))
 
-
-
+# mode, [0] returns the first element in the mode series
+print(data["113 Cause Name"].mode()[0])
+print(data['Cause Name'].mode()[0])
+print(data['State'].mode()[0])
+# These give answers for the most frequent value in each categorical variables,
+# however, they are not actually the most frequent, since they all have the same
+# frequency. 
 
