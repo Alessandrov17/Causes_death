@@ -326,9 +326,16 @@ sns.displot(data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year
 #g) Empirical cumulative distributions
 
 sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
+#Questions;
+#a) from the distributed plots i would say the distributiuon of age adjusted death rates is skewed , while most states have alot higher death rates, the data is not normally distributed.
 
+  #b)Yes, a few states show very high death rates compared to the rest, we can see the far right of the ecdf plot isolated points.
 
-            
+#c) The mean is around 60-70 deaths per 100,000 people , and median is slightly lower confirming the skew, and accoring to the Kde standard deriviation it is pretty variable between states as most have similar data some show noticeable differneces
+
+#d)  The data is right skewed, which means that some states have much higher death rates than the national average.       
+
+#e) The most frequent values are from 50-70, over 80 they decline quickly and over 100 very few occur, The ecdf confirms that about 80% of states fall below an age adjusted death rate of 80
 
 
 
