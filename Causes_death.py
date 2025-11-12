@@ -231,6 +231,7 @@ plt.show()
 # 2. Preliminary steps
 # a) Initial data inspection:
 print(data.head(10))
+data_10 = data.head(10)
 print(data.shape)
 print(data.info())
 print(data.describe())
@@ -247,7 +248,7 @@ print(data.info())
 # No change were made, because all rows are unique
 
 # c) Identify and manage missing values:
-print(data.isnull())
+nullvalues = data.isnull()
 # Boolean is false, all columns have values within them
 
 # d) Correct data types and formats:
@@ -271,8 +272,7 @@ print(data.describe())
 print("Kurtosis of each numerical column:")
 print(data.kurt(axis = 0, numeric_only=True))
 # Mode of each numerical column:
-print("The mode of each numerical column is:")
-print(data.mode(numeric_only = True))
+mode1 = data.mode(numeric_only = True)
 # Variance of each numerical column:
 print("The variance of each numerical column is:")
 print(data.var(numeric_only = True))
@@ -284,14 +284,14 @@ print(data.skew(numeric_only = True))
 
 # frequency counts
 
-print(data.value_counts("113 Cause Name"))
-print(data['Cause Name'].value_counts())
-print(data['State'].value_counts())
+frequency1 = data.value_counts("113 Cause Name")
+frequency2 = data['Cause Name'].value_counts()
+frequency3 = data['State'].value_counts()
 
 # proportion
-print(data.value_counts("113 Cause Name", normalize = True))
-print(data['Cause Name'].value_counts(normalize = True))
-print(data['State'].value_counts(normalize = True))
+proportion1 = data.value_counts("113 Cause Name", normalize = True)
+proportion2 = data['Cause Name'].value_counts(normalize = True)
+proportion3 = data['State'].value_counts(normalize = True)
 
 # mode, [0] returns the first element in the mode series
 print(data["113 Cause Name"].mode()[0])
@@ -335,9 +335,9 @@ table2 = pd.crosstab(data['Cause Name'], data['Deaths'])
 table3 = pd.crosstab(data['113 Cause Name'], data['Deaths'])
 
 # Percentage using the crosstab()
-proportion1 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'], normalize=True)
-proportion2 = pd.crosstab(data['Cause Name'], data['Deaths'], normalize=True)
-proportion3 = pd.crosstab(data['113 Cause Name'], data['Deaths'], normalize=True)
+proportion4 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'], normalize=True)
+proportion5 = pd.crosstab(data['Cause Name'], data['Deaths'], normalize=True)
+proportion6 = pd.crosstab(data['113 Cause Name'], data['Deaths'], normalize=True)
 
 # Three categorical variables using the crosstab()
 table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data['State'])
