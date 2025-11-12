@@ -244,37 +244,27 @@ print(dupdata.info())
 # Drop data for all column "Year", output shows first data for each year
 dropdata = data.drop_duplicates(keep='first')
 
-# No change were made, because all rows are unique
-
-# c) Identify and manage missing values:
-nullvalues = data.isnull()
-# Boolean is false, all columns have values within them
-
-# d) Correct data types and formats:
-# All of these are boolean which verify if one of these columns contains empty columns
-# They all return False, thus, all columns are full, no empty values
-print("Col. Year:", pd.isnull('Year'))
-print("Col. 113 Cause Name:", pd.isnull('113 Cause Name'))
-print("Col. Cause Name:", pd.isnull('Cause Name'))
-print("Col. State:", pd.isnull('State'))
-print("Col. Deaths:", pd.isnull('Deaths'))
-print("Age-adjusted Death Rate:", pd.isnull('Age-adjusted Death Rate'))
-
-# d) Correct data types and formats: (unecessary))
-
 # 3. Univariate non-graphical EDA
 
 # Numerical variable EDA
 # Mean, median, standard deviation, and quartiles.
-print(data.describe())
+describe_data = (data.describe())
+
 # Kurtosis of each numerical column:
 print("Kurtosis of each numerical column:")
 print(data.kurt(axis = 0, numeric_only=True))
+
 # Mode of each numerical column:
-mode1 = data.mode(numeric_only = True)
+mode_year = data['Year'].mode()
+mode_deaths = data['Deaths'].mode()
+mode_age_adjusted_death_rate = data['Age-adjusted Death Rate'].mode()
+print(data['Deaths'].value_counts().head())
+print(data['Age-adjusted Death Rate'].value_counts().head())
+
 # Variance of each numerical column:
 print("The variance of each numerical column is:")
 print(data.var(numeric_only = True))
+
 # Skewness of each numerical column:
 print("The skew of each numerical column is:")
 print(data.skew(numeric_only = True))
