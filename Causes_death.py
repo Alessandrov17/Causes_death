@@ -301,7 +301,7 @@ print(data['State'].mode()[0])
 # however, they are not actually the most frequent, since they all have the same
 # frequency. 
 
-#4.  distribution plots 
+#4.  Univariate graphical EDA
 #a) custom number of bins 
 sns.displot(data,x="Age-adjusted Death Rate",bins=25)
 #b) Conditioning on other variables
@@ -327,8 +327,21 @@ sns.displot(data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year
 
 sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
 
+# 5. Multivariate non-graphical EDA        
 
-            
+# Two categorical variables using the crosstab()
+table1 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'])
+table2 = pd.crosstab(data['Cause Name'], data['Deaths'])
+table3 = pd.crosstab(data['113 Cause Name'], data['Deaths'])
+
+# Percentage using the crosstab()
+proportion1 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'], normalize=True)
+proportion2 = pd.crosstab(data['Cause Name'], data['Deaths'], normalize=True)
+proportion3 = pd.crosstab(data['113 Cause Name'], data['Deaths'], normalize=True)
+
+# Three categorical variables using the crosstab()
+table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data['State'])
+
 
 
 
