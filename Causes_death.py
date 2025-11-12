@@ -230,10 +230,10 @@ plt.show()
 
 # 2. Preliminary steps
 # a) Initial data inspection:
-print(data.head(10))
+data_10 = data.head(10)
 print(data.shape)
 print(data.info())
-print(data.describe())
+describe_data = (data.describe())
 
 # b) Handle duplicate entries:
 # dupdata becomes new dataset with removed row duplicates
@@ -243,11 +243,11 @@ print(dupdata.info())
 
 # Drop data for all column "Year", output shows first data for each year
 dropdata = data.drop_duplicates(keep='first')
-print(data.info())
+
 # No change were made, because all rows are unique
 
 # c) Identify and manage missing values:
-print(data.isnull())
+nullvalues = data.isnull()
 # Boolean is false, all columns have values within them
 
 # d) Correct data types and formats:
@@ -271,8 +271,7 @@ print(data.describe())
 print("Kurtosis of each numerical column:")
 print(data.kurt(axis = 0, numeric_only=True))
 # Mode of each numerical column:
-print("The mode of each numerical column is:")
-print(data.mode(numeric_only = True))
+mode1 = data.mode(numeric_only = True)
 # Variance of each numerical column:
 print("The variance of each numerical column is:")
 print(data.var(numeric_only = True))
@@ -284,14 +283,14 @@ print(data.skew(numeric_only = True))
 
 # frequency counts
 
-print(data.value_counts("113 Cause Name"))
-print(data['Cause Name'].value_counts())
-print(data['State'].value_counts())
+frequency1 = data.value_counts("113 Cause Name")
+frequency2 = data['Cause Name'].value_counts()
+frequency3 = data['State'].value_counts()
 
 # proportion
-print(data.value_counts("113 Cause Name", normalize = True))
-print(data['Cause Name'].value_counts(normalize = True))
-print(data['State'].value_counts(normalize = True))
+proportion1 = data.value_counts("113 Cause Name", normalize = True)
+proportion2 = data['Cause Name'].value_counts(normalize = True)
+proportion3 = data['State'].value_counts(normalize = True)
 
 # mode, [0] returns the first element in the mode series
 print(data["113 Cause Name"].mode()[0])
@@ -301,7 +300,7 @@ print(data['State'].mode()[0])
 # however, they are not actually the most frequent, since they all have the same
 # frequency. 
 
-#4.  distribution plots 
+#4.  Univariate graphical EDA
 #a) custom number of bins 
 sns.displot(data,x="Age-adjusted Death Rate",bins=25)
 #b) Conditioning on other variables
@@ -326,16 +325,22 @@ sns.displot(data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year
 #g) Empirical cumulative distributions
 
 sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
-#Questions;
-#a) from the distributed plots i would say the distributiuon of age adjusted death rates is skewed , while most states have alot higher death rates, the data is not normally distributed.
 
-  #b)Yes, a few states show very high death rates compared to the rest, we can see the far right of the ecdf plot isolated points.
+# 5. Multivariate non-graphical EDA        
 
-#c) The mean is around 60-70 deaths per 100,000 people , and median is slightly lower confirming the skew, and accoring to the Kde standard deriviation it is pretty variable between states as most have similar data some show noticeable differneces
+# Two categorical variables using the crosstab()
+table1 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'])
+table2 = pd.crosstab(data['Cause Name'], data['Deaths'])
+table3 = pd.crosstab(data['113 Cause Name'], data['Deaths'])
 
-#d)  The data is right skewed, which means that some states have much higher death rates than the national average.       
+# Percentage using the crosstab()
+proportion4 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'], normalize=True)
+proportion5 = pd.crosstab(data['Cause Name'], data['Deaths'], normalize=True)
+proportion6 = pd.crosstab(data['113 Cause Name'], data['Deaths'], normalize=True)
 
-#e) The most frequent values are from 50-70, over 80 they decline quickly and over 100 very few occur, The ecdf confirms that about 80% of states fall below an age adjusted death rate of 80
+# Three categorical variables using the crosstab()
+table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data['State'])
+
 
 
 
