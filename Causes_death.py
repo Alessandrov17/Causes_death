@@ -339,4 +339,77 @@ sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
 
 
 
+# 6) 
+#6.1 a Using faceting feature. (showing plots of every year)
+
+sns.relplot(data,x="Deaths", y="Age-adjusted Death Rate",col="Year") 
+
+#b using 5 variables 
+
+sns.relplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",size="Deaths",col="Year") 
+
+#c Using line, not scatter 
+
+sns.lineplot(heart,x="Year",y="Age-adjusted Death Rate",hue="State")
+
+#d) 
+sns.barplot(data, x="Year", y="Age-adjusted Death Rate",hue="Cause Name",errorbar="sd")
+
+#e Include a linear regression
+
+sns.lmplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",height=5)
+
+
+#6.2 
+#a) use jitter effect
+
+sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",jitter=True)
+
+#b) Disable jitter
+#Variable used because we can use the line to assume the rate for each cause clearly.
+
+sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",jitter=False)
+
+
+#c) beeswarm
+
+sns.swarmplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Year",)
+
+
+#d) violin split
+sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year",kind="violin")
+
+#e) Box Plot
+
+sns.boxplot(data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year")
+
+
+#f) boxen plot
+sns.boxenplot(data,x="Cause Name", y="Age-adjusted Death Rate",)
+
+
+#g) violin plot with scatter points inside
+
+g=sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",kind="violin",inner=None)
+sns.swarmplot(data,x="Cause Name", y="Age-adjusted Death Rate",color="k",size="3",ax=g.ax)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
