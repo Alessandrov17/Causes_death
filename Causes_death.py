@@ -291,8 +291,15 @@ print(data['State'].mode()[0])
 # frequency. 
 
 #4.  Univariate graphical EDA
+
+# Remove All Causes and Unintentional injuries from 113 Cause Name
+adjusted_data = data[(data['113 Cause Name'] != 'All Causes') 
+                     & (data['113 Cause Name'] !='Accidents (unintentional injuries) (V01-X59,Y85-Y86)')]
 #a) custom number of bins 
-sns.displot(data,x="Age-adjusted Death Rate",bins=25)
+
+#  ***CHANGED "data" TO "adjusted_data"!!!!****
+
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",bins=25)
 #b) Conditioning on other variables
 sns.displot(data,x="Age-adjusted Death Rate",hue="Year",element="step",bins=25)
 
