@@ -326,13 +326,13 @@ sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
 # 5. Multivariate non-graphical EDA        
 
 # Two categorical variables using the crosstab()
-table1 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'])
-table2 = pd.crosstab(data['Cause Name'], data['Deaths'])
-table3 = pd.crosstab(data['113 Cause Name'], data['Deaths'])
+table1 = pd.crosstab(adjusted_data['Age-adjusted Death Rate'], adjusted_data['Cause Name'])
+table2 = pd.crosstab(adjusted_data['Deaths'], adjusted_data['Cause Name'])
+table3 = pd.crosstab(adjusted_data['Deaths'], adjusted_data['113 Cause Name'])
 
 # Percentage using the crosstab()
-proportion4 = pd.crosstab(data['Cause Name'], data['Age-adjusted Death Rate'], normalize=True)
-proportion5 = pd.crosstab(data['Cause Name'], data['Deaths'], normalize=True)
+proportion4 = pd.crosstab(adjusted_data['Cause Name'], adjusted_data['Age-adjusted Death Rate'], normalize=True)
+proportion5 = pd.crosstab(adjusted_data['Cause Name'], adjusted_data['Deaths'], normalize=True)
 proportion6 = pd.crosstab(data['113 Cause Name'], data['Deaths'], normalize=True)
 
 # Three categorical variables using the crosstab()
@@ -394,6 +394,7 @@ sns.boxenplot(data,x="Cause Name", y="Age-adjusted Death Rate",)
 
 g=sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",kind="violin",inner=None)
 sns.swarmplot(data,x="Cause Name", y="Age-adjusted Death Rate",color="k",size="3",ax=g.ax)
+table4 = pd.crosstab([adjusted_data['Cause Name'], adjusted_data['Age-adjusted Death Rate']], adjusted_data['State'])
 
 
 
