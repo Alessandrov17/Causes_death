@@ -344,72 +344,85 @@ table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data
 # 6) 
 #6.1 a Using faceting feature. (showing plots of every year)
 
-sns.relplot(data,x="Deaths", y="Age-adjusted Death Rate",col="Year") 
+sns.relplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",col="Year") 
 
 #b using 5 variables 
 
-sns.relplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",size="Deaths",col="Year") 
+sns.relplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",size="Deaths",col="Year") 
 
 #c Using line, not scatter 
 
 sns.lineplot(heart,x="Year",y="Age-adjusted Death Rate",hue="State")
 
 #d) 
-sns.barplot(data, x="Year", y="Age-adjusted Death Rate",hue="Cause Name",errorbar="sd")
+sns.barplot(adjusted_data, x="Year", y="Age-adjusted Death Rate",hue="Cause Name",errorbar="sd")
 
 #e Include a linear regression
 
-sns.lmplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",height=5)
+sns.lmplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",height=5)
 
 
 #6.2 
 #a) use jitter effect
 
-sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",jitter=True)
+sns.catplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",jitter=True)
 
 #b) Disable jitter
 #Variable used because we can use the line to assume the rate for each cause clearly.
 
-sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",jitter=False)
+sns.catplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",jitter=False)
 
 
 #c) beeswarm
 
-sns.swarmplot(data,x="Deaths", y="Age-adjusted Death Rate",hue="Year",)
+sns.swarmplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",hue="Year",)
 
 
-#d) violin split
-sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year",kind="violin")
+#f) violin split
+sns.catplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year",kind="violin")
 
-#e) Box Plot
+#d) Box Plot
 
-sns.boxplot(data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year")
+sns.boxplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",hue="Year")
 
 
-#f) boxen plot
-sns.boxenplot(data,x="Cause Name", y="Age-adjusted Death Rate",)
+#e) boxen plot
+sns.boxenplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",)
 
 
 #g) violin plot with scatter points inside
 
-g=sns.catplot(data,x="Cause Name", y="Age-adjusted Death Rate",kind="violin",inner=None)
-sns.swarmplot(data,x="Cause Name", y="Age-adjusted Death Rate",color="k",size="3",ax=g.ax)
+g=sns.catplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",kind="violin",inner=None)
+sns.swarmplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",color="k",size=3,ax=g.ax)
 table4 = pd.crosstab([adjusted_data['Cause Name'], adjusted_data['Age-adjusted Death Rate']], adjusted_data['State'])
 
 
+#h)barplot 97%  Confidence interval 
+
+sns.barplot(adjusted_data,x="Cause Name",y="Age-adjusted Death Rate",hue="Year",errorbar=("pi",97),kind="bar")
+
+#i) barplot 90% Confidence interval +dashed line
 
 
+sns.barplot(adjusted_data,x="Year",y="Age-adjusted Death Rate",hue="Cause Name",errorbar=("pi",90),kind="bar",linestyle="--")
+
+#j) barplotwith number of observations per category: Cause Name
+
+sns.countplot(adjusted_data,x="Cause Name")
+
+#6.3
+#a)Heatmap 
+
+sns.displot(adjusted_data, x="Age-adjusted Death Rate", y="Year",binwidth=(2,0.5),cbar=True)
 
 
+#b) using  KDE contour
 
+sns.displot(adjusted_data, x="Age-adjusted Death Rate", y="Year",kind="kde") 
 
+#c)
 
-
-
-
-
-
-
+sns.displot(adjusted_data, x="Death", y="Age-adjusted Death Rate",hue="Year",kind="kde")
 
 
 
