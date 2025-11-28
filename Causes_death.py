@@ -33,6 +33,10 @@ import seaborn as sns
 
 data = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States (3).csv")
 
+# Remove All Causes and Unintentional injuries from 113 Cause Name
+adjusted_data = data[(data['113 Cause Name'] != 'All Causes') 
+                     & (data['113 Cause Name'] !='Accidents (unintentional injuries) (V01-X59,Y85-Y86)')]
+
 # Making all columns into numpy arrays
 years = data["Year"].to_numpy()
 cause_name = data["113 Cause Name"].to_numpy()
@@ -79,10 +83,10 @@ print("Remaining records:", len(years))
 import numpy as np
 
 # Filter US only data
-us_data = data[data["State"] == "United States"]
+us_data = adjusted_data[adjusted_data["State"] == "United States"]
 
 # Filter US states. Filters for data in 2017
-states_data = data[(data["State"] != "United States") & (data["Year"] == 2017)]
+states_data = adjusted_data[(adjusted_data["State"] != "United States") & (adjusted_data["Year"] == 2017)]
 
 # Identify top 10 causes nationally. Groups each "113 Cause Name" category and adds
 # The sum of all the "death" values. Then it sorts the values in ascending order, 
@@ -115,6 +119,24 @@ plt.ylabel("State")
 plt.tight_layout()
 plt.show()
 
+states_data = adjusted_data[(adjusted_data["State"] != "United States") & (adjusted_data["Year"] == 2000)]
+heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
+heatmap_data = states_data[states_data["113 Cause Name"].isin(top10_causes)]
+heatmap_pivot = heatmap_data.pivot_table(index="State",columns="113 Cause Name",values="Age-adjusted Death Rate",aggfunc="mean")
+values = heatmap_pivot.values
+states = heatmap_pivot.index
+causes = heatmap_pivot.columns
+# Matplotlib Plotting
+plt.figure(figsize=(12, 8))
+plt.imshow(values, aspect='auto', cmap='coolwarm')
+plt.colorbar(label="Age-adjusted Death Rate (per 100,000)")
+plt.xticks(np.arange(len(causes)), causes, rotation=45, ha='right', fontsize=8)
+plt.yticks(np.arange(len(states)), states, fontsize=8)
+plt.title("Age-adjusted Death Rates by State for Top 10 Causes (2000)")
+plt.xlabel("Cause of Death")
+plt.ylabel("State")
+plt.tight_layout()
+plt.show()
 
 # d) Line Plot: Trends in Age-Adjusted Death Rates for Top 10 Causes (2000–2017)
     
@@ -140,7 +162,7 @@ plt.show()
 import textwrap
 
 # Filter 2017 data
-data_2017 = data[data["Year"] == 2017]
+data_2017 = adjusted_data[adjusted_data["Year"] == 2017]
 
 # Groups data from 2017, adds deaths for each 113 cause name category, and selects
 # only top 5.
@@ -292,36 +314,32 @@ print(data['State'].mode()[0])
 
 #4.  Univariate graphical EDA
 
-# Remove All Causes and Unintentional injuries from 113 Cause Name
-adjusted_data = data[(data['113 Cause Name'] != 'All Causes') 
-                     & (data['113 Cause Name'] !='Accidents (unintentional injuries) (V01-X59,Y85-Y86)')]
-#a) custom number of bins 
 
-#  ***CHANGED "data" TO "adjusted_data"!!!!****
+#a) custom number of bins 
 
 sns.displot(adjusted_data,x="Age-adjusted Death Rate",bins=25)
 #b) Conditioning on other variables
-sns.displot(data,x="Age-adjusted Death Rate",hue="Year",element="step",bins=25)
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",hue="Year",element="step",bins=25)
 
 #c)stacked histogram
 
-sns.displot(data,x="Age-adjusted Death Rate",hue="Year",multiple="stack",bins=25)
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",hue="Year",multiple="stack",bins=25)
 
 #d) dodge bars
 
-sns.displot(data,x="Age-adjusted Death Rate",hue="Year",multiple="dodge",bins=25)
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",hue="Year",multiple="dodge",bins=25)
 
 #e)normalized histogram statistics
 
-sns.displot(data,x="Age-adjusted Death Rate",hue="Year",stat="density",common_norm="False",bins=25)
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",hue="Year",stat="density",common_norm="False",bins=25)
 
 #f) Kernal density estimation (KDE)
 
-sns.displot(data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year",fill="True" )
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",kind="kde",bw_adjust=1.25,hue="Year",fill="True" )
 
 #g) Empirical cumulative distributions
 
-sns.displot(data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
+sns.displot(adjusted_data,x="Age-adjusted Death Rate",hue="Year",kind="ecdf")
 
 # 5. Multivariate non-graphical EDA        
 
@@ -336,8 +354,7 @@ proportion5 = pd.crosstab(adjusted_data['Deaths'], adjusted_data['Cause Name'], 
 proportion6 = pd.crosstab(data['Deaths'], data['113 Cause Name'], normalize=True)
 
 # Three categorical variables using the crosstab()
-table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data['State'])
-
+table4 = pd.crosstab([adjusted_data['Cause Name'], adjusted_data['Age-adjusted Death Rate']], adjusted_data['State'])
 
 
 
@@ -347,8 +364,7 @@ table4 = pd.crosstab([data['Cause Name'], data['Age-adjusted Death Rate']], data
 sns.relplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",col="Year") 
 
 #b using 5 variables 
-
-sns.relplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",hue="Cause Name",size="Deaths",col="Year") 
+sns.relplot(adjusted_data,x="Deaths", y="Age-adjusted Death Rate",hue="Year",size="Deaths",col="Cause Name") 
 
 #c Using line, not scatter 
 
@@ -394,37 +410,28 @@ sns.boxenplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",)
 
 g=sns.catplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",kind="violin",inner=None)
 sns.swarmplot(adjusted_data,x="Cause Name", y="Age-adjusted Death Rate",color="k",size=3,ax=g.ax)
-table4 = pd.crosstab([adjusted_data['Cause Name'], adjusted_data['Age-adjusted Death Rate']], adjusted_data['State'])
+
 
 
 #h)barplot 97%  Confidence interval 
 
-sns.barplot(adjusted_data,x="Cause Name",y="Age-adjusted Death Rate",hue="Year",errorbar=("pi",97),kind="bar")
+sns.barplot(adjusted_data,x="Cause Name",y="Age-adjusted Death Rate",hue="Year",errorbar=("pi",97))
 
 #i) barplot 90% Confidence interval +dashed line
 
 
-sns.barplot(adjusted_data,x="Year",y="Age-adjusted Death Rate",hue="Cause Name",errorbar=("pi",90),kind="bar",linestyle="--")
+sns.barplot(adjusted_data,x="Year",y="Age-adjusted Death Rate",hue="Cause Name",errorbar=("pi",90), linestyle="--")
 
 #j) barplotwith number of observations per category: Cause Name
 
 sns.countplot(adjusted_data,x="Cause Name")
 
-#6.3
-#a)Heatmap 
-
+# 6.3 - a) Heatmap
 sns.displot(adjusted_data, x="Age-adjusted Death Rate", y="Year",binwidth=(2,0.5),cbar=True)
-
-
-#b) using  KDE contour
-
-sns.displot(adjusted_data, x="Age-adjusted Death Rate", y="Year",kind="kde") 
-
-#c)
-
-sns.displot(adjusted_data, x="Death", y="Age-adjusted Death Rate",hue="Year",kind="kde")
-
-
+# b) using  KDE contour
+sns.displot(adjusted_data, x="Age-adjusted Death Rate", y="Year",kind="kde")
+# c)
+sns.displot(adjusted_data, x="Deaths", y="Age-adjusted Death Rate",hue="Year",kind="kde")
 
 
 
